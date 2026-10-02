@@ -1,0 +1,643 @@
+--- PAGE 1 ---
+Automated Tooth Segmentation in X-ray Images
+using Attention Integrated U-Net++ Model
+Abstract—Oral functioning, the ability to perform 
+various oral functions, pain-free and without being ill, is 
+one of the indicators of overall well-being and life 
+satisfaction. Even though these diseases are mostly 
+preventable, a majority of individuals all over the world 
+suffer from periodontal disease, dental caries, and oral 
+malignancies to an estimated of 5 billion people 
+worldwide. However, there are still use of traditional 
+radiographic techniques like periapical and panoramic 
+radiography that assist in diagnosis. A better diagnosis is 
+enhanced through the use of modern techniques in 
+imaging such as MRI, ultrasonography and CBCT 
+imaging. Deep learning-based solutions enhance 
+diagnostic capabilities through dental segmentation in 
+images since they learn from unmodified data in 
+contrast to traditional machine learning and deep 
+learning techniques which produce inferior results when 
+dealing with massive datasets. Therefore, in an effort to 
+solve the problem of efficient dental segmentation, 
+anencoder-decoder basedtooth segmentation model 
+based on U-Net++ architecture modified using Efficient 
+Channel Attention Network is proposed that aims at 
+enhancing the accuracy of dental diagnosis. The paper 
+also focus of the performance of different state-of-art 
+CNN techniques namely, U-Net, FCNs, ENet, U-Net++, 
+U-Net 3+, SwiftNet on the standard Tuffs Dental dataset
+for model selection and comparisons. The proposed
+model outperforms other segmentation models and
+achieves the best mean average precision of 96.4% and a
+dice coefficient of 90%.
+Keywords - Convolutional Neural Networks, Deep 
+Learning Tufts Dental database, Models MRI, U-Net++, 
+Segmentation 
+I. INTRODUCTION
+Nowadays, dental health tends to be a major indicator of 
+overall health and life satisfaction. The capacity to 
+articulate, smile, discern tastes, touch, chew, ingest, and 
+employ gestures to convey a range of emotions while 
+avoiding pain, discomfort, and craniofacial diseases is all 
+included in oral health. The most frequent oral disorders are 
+periodontal disease, often known as gum disease, dental 
+caries, tooth decay, and oral cancers. Despite being mostly 
+avoidable, oral disorders are persistent, impacting over 3.5 
+billion people globally. Dental caries, the most common 
+disease in the world, is becoming more widespread. 
+Radiographs are helpful tools that may be used in between a 
+clinical examination to diagnose dental problems. 
+Panoramic and periapical radiographs are often used and 
+ 
+ provide information for routine treatments. However, 
+limitations arise when projecting the entirety or a portion of 
+the oral cavity onto a two-dimensional image plane. To 
+address these issues and provide additional information 
+needed for the diagnosis or treatment planning of specific 
+patients, new three-dimensional imaging techniques are 
+needed. There is the cone beam computed tomography, 
+abbreviated as CBCT, the magnetic resonance imaging 
+known as MRI, and ultrasound imaging. The entire orofacial 
+region, encompassing the jaws, teeth, sinuses, and 
+temporomandibular joint (TMJ) is visible on panoramic 
+radiographs. These images are highly informative for 
+illustrating abnormalities or phases of oral growth, as well 
+as acting as a preliminary assessment for widespread illness 
+or numerous problems.Convolutional Neural Networks 
+(CNNs) have shown effectiveness in several dental imaging 
+applications, like segmentation and categorization of 
+anomalies in dental X-ray images, according to an 
+increasing amount of research. The Tufts Dental Database, a 
+large dataset of 1000 panoramic dental radiographs 
+painstakingly categorized by experts, is one important 
+addition to this order. Traditional methods for analyzing 
+dental images frequently depend on machine learning 
+techniques that require complex feature engineering and 
+preprocessing. Although these techniques have succeeded, 
+they face issues with efficiency, performance, and 
+scalability when applied to larger datasets. Recent 
+advancements in deep learning, including attention 
+mechanisms and transformers, have revolutionized this 
+field, enabling neural networks to learn directly from raw 
+data and overcome these challenges.This paper aims to 
+improve upon existing methods by developing an automated 
+tooth segmentation system based on the U-Net++ 
+architecture, modified with attention mechanisms to 
+enhance segmentation accuracy in panoramic radiographs. 
+Unlike traditional approaches, the proposed model directly 
+leverages deep learning to improve segmentation precision, 
+thereby addressing the limitations of prior methods. By 
+using advanced neural network designs and preprocessing 
+techniques, the model demonstrates superior segmentation 
+performance, paving the way for more accurate and efficient 
+dental treatment models and diagnostics. 
+Paper Organization:The rest of the paper is organized as 
+follows. In Section II, we present a detailed review of 
+related work in the field of automated tooth segmentation 
+and the various deep learning models used. Section III 
+describes the methodology, including the architecture of the 
+proposed U-Net++ model and the integration of the 
+Julakanti Sai Yaswanth 
+Dept. of Computer Science and Engineering 
+Amrita School of Computing, Bengaluru 
+ Amrita Vishwa Vidyapeetham, India. 
+bl.en.u4cse21074@bl.students.amrita.edu 
+Kanderi Johith Kumar  
+Dept. of Computer Science and Engineering 
+Amrita School of Computing, Bengaluru 
+ Amrita Vishwa Vidyapeetham, India. 
+bl.en.u4cse21086@bl.students.amrita.edu 
+Rimjhim Padam Singh 
+Dept. of Computer Science and Engineering 
+Amrita School of Computing,Bengaluru 
+ Amrita Vishwa Vidyapeetham, India. 
+ps_rimjhim@blr.amrita.edu 
+1317
+2025 3rd International Conference on Intelligent Systems, Advanced Computing and Communication (ISACC)
+979-8-3315-2389-3/25/$31.00 ©2025 IEEE
+2025 3rd International Conference on Intelligent Systems, Advanced Computing and Communication (ISACC) | 979-8-3315-2389-3/25/$31.00 ©2025 IEEE | DOI: 10.1109/ISACC65211.2025.10969266
+--- PAGE 2 ---
+Efficient Channel Attention (ECA) mechanism. Section IV 
+outlin
+es the experiments conducted, including dataset 
+preparation, training procedures, and performance metrics. 
+In Section V, we discuss the results, compare the proposed 
+method with existing techniques, and highlight its 
+advantages. Finally, Section VI concludes the paper and 
+suggests possible directions for future research. 
+II. RELATED WORK
+Leea et al. [1] sought to determine the effectiveness of deep 
+convolutional neural networks (CNNs) in differentiating 
+dental cavities from periapical X-rays. In total, three 
+thousand photographs were used. Regarding pretext 
+processing, CNN is used and Inception V3 for transfer 
+learning. They demonstrated a high diagnostic performance 
+in molar, premolar, and combined configurations and 
+identified that the premolar configuration performed the best 
+in terms of the AUC. Hussain et al. [2] employed several 
+state-of-the-art techniques on deep learning to segment brain 
+tumors. Theirproposed architecture predicts the outputs for 
+corresponding labels andtheir algorithm works for the over-
+fitting. The work also employed the pre-processing steps 
+such as N4ITK bias field correction. Stember et al. [3] 
+compared the manual annotations with segmentation masks 
+derived from data logged by eye-and-hand-recording 
+equipment used for deep learning in medical imaging. They 
+analyzed 19 radiologic screenshots and 356 T1-weighted 
+contrast-enhanced meningioma pictures and proved that 
+both masks are significantly different from each other with 
+very high Dice similarity coefficient. The outcomes showed 
+that although there are differences between the two types of 
+masks, they do not significantly affect the CNNs 
+performance, and further explained why eye tracking is so 
+useful for deep learning segmentation. 
+Muresan et al. [4] described one new method, which is 
+developed over deep learning and advanced image 
+processing to understand the location of teeth and categorize 
+the various dental abnormalities in panoramic X-ray 
+images.A dataset including 14 distinct dental illnesses and 
+after using annotated data to train their model for semantic 
+segmentation, they segmented and improved the bounding 
+boxes that corresponded to the tooth determinationsusing a 
+variety of image processing operations. Within the 
+discovered region of interest, each tooth occurrence was 
+tagged and the issue impacting it was determined by a 
+majority vote method based on a histogram. Panetta et al [5] 
+employed a dataset consisting of one thousand panoramic 
+dental radiography pictures. The researchers categorized 
+these images into five categories: Peripheral features, 
+radiodensity, appendicular load, effect on neighbouring 
+tissues or organs and abnormality profile.  This dataset's 
+main goal is to improve tooth segmentation algorithms. 
+Notably, in their studies, using convolutional neural network 
+produced the best accuracy.  
+Sultan et al. [6] utilized panoramic images of radiographs 
+for performing teeth segmentation with the help of a noise-
+reduced encoder-based residual U-Net model. In this paper, 
+the authors pre-processed the dataset that contains 1000 
+images and then used their proposed residual U-net CNN 
+model which tries to predict the teeth defects using the 
+denoised encoder block of the model. Ghahremani et al. [7] 
+separated cavities and dental restorations in X-ray pictures 
+by using convolutional neural networks. Using the Universal 
+Teeth Numbering (UTN) system, the procedure entails 
+determining the quantity and placement of each tooth.They 
+achieved great accuracy and recall by addressing problems 
+with teeth ordering and prediction in X-ray images. Next, 
+each tooth's picture was cropped so that the cavity and 
+repair are precisely segmented. Through the identification of 
+abnormalities that individuals might not detect, their 
+strategy lessens responsibility and lowers prejudice in 
+treatment assessment 
+Merter et al. [8] proposed deep learning models for the 
+segmentation of teeth and maxillomandibular region. Their 
+work utilizes medical image segmentation techinques such as 
+Segmenter, Vision Transformer (ViT), and U-Net, which 
+outperformed all the other benchmark models. EhaRenwi et 
+al. [9] used a U-net model for the task of segmenting images 
+of the teeth from the X-ray. On the same network, U-Net was 
+also employed to perform data pre-processing by 
+normalizing gamma plus applying histogram equalization. 
+On the same note, U-Net was better off than the other deep 
+learning structures. 
+Csaba et al. [10] explored the use of convolutional neural 
+networks especially U-Net, for dental radiology's medical 
+image segmentation. They concentrated on the difficult task 
+of segmenting dental restorations, including fillings, crowns 
+and root canal treatments, on panoramic radiographs because 
+of their varying shapes and sizes. 1781 panoramic 
+radiographs were used that specialists annotated for various 
+dental restorations tasks. For training, the dataset was 
+divided into multiple tiles, with the number of tiles ranging 
+from 2 to 20. An encoder-decoder structure with skip links 
+made up the model. With increase in number of tiles utilized, 
+the F1-score increased, demonstrating major improvements 
+in segmentation accuracy, particularly for root canal fills. 
+SenbaoHou et al. [11] discussed the U-Net concept and the 
+use of the Squeeze-Excitation Module in the integration of 
+the encoder and the decoder. They proved that in order to 
+overcome semantic gap, one needs to employ thick skip 
+connections. Besides, they got features regarding the shapes 
+of teeth with an aid of Multi-scale Aggregation Attention 
+Block (MAB). At the bottleneck layer, they established a 
+Dilated Hybrid Self-Attentive Block (DHAB) that is 
+specifically capable of disregarding irrelevant background 
+details. 
+  Çelik et al. [12] used ten different models for 
+identifying periapical lesions investigation. Furthermore, the 
+effectiveness of these models was assessed on other 
+datasets. According to the research, periapical lesions on 
+periapical radiographs (PRs) may be reliably predicted by 
+the deep learning models RetinaNet and adaptive training. 
+Silva et al.[13] discussed the challenges that dentists faced 
+when evaluating X-rays and proposed computational 
+tools to help with automated tooth identification and 
+categorization. They concentrated on using deep learning 
+techniques, specifically four network frameworks which are 
+Mask R-CNN, ResNeSt, PANet, and HTC to divide and 
+recognize teeth in panoramic X-rays. PANet performed the 
+best in segmentation and numbering. 
+1318
+--- PAGE 3 ---
+Chahal et al. [14] integrated two-pathway and cascade 
+structures for the analysis to learn spatial, depth-wise 
+features and dependencies of neighboring labels for more 
+accurate segmentation for implementation of brain 
+segmentation. There are two types of cascade frameworks 
+used: MFC Cascade and Input Cascade. The MFC Cascade 
+performs worse than the Input Cascade. The proposed 
+methodology involves slicing 3D MRI scans into 2D slices 
+for processing, addressing class imbalance issues due to 
+fewer tumor slices compared to non-tumor slices.  
+Ali et al. [15] aimed to provide a fuzzy clustering 
+algorithm for the segmentation of dental X-ray images, 
+based on indeterminate orthogonal matrices. Their work 
+discusses the difficulties caused by shared cluster borders 
+and emphasizes the significance of accurate segmentation in 
+medical imaging for successful diagnosis. The proposed 
+algorithm uses orthogonal principles to create pixel clusters 
+and transforms image data into indeterminate representation 
+sets in order to improve segmentation accuracy. The 
+outcomes showed that the novel approach outperformed the 
+most advanced techniques for quality clustering. Several 
+other efficient algorithms have been proposed to handle 
+different healthcare problems can be studied by referring to 
+[16-19]. 
+III. METHODOLOGY
+A. Data
+set Description
+The work uses Tufts Dental Dataset, a dataset consisting of 
+real-time dental X-ray images provided by Tufts University 
+to comprehensively analyze the performance of the model.  
+Fig. 1. Overview of the proposed study 
+It includes 1,000 panoramic dental radiographs, each 
+profe
+ssionally annotated with details on teeth and 
+anomalies. The dataset folder contains X-ray images, teeth 
+masks, maxillomandibular masks, and abnormality masks. 
+Five aspects were used to classify these images: anatomical 
+location, peripheral features, radiation density, and impacts 
+on the surrounding structure. It has images of different 
+patients' teeth and dental architecture, which enables 
+researchers to create and evaluate algorithms for dental 
+problem diagnosis. The collection includes pictures captured 
+at various resolutions, as well as a range of dental diseases. 
+Additionally, the data set is used for additional dental 
+diagnostic applications such as bone structure analysis, 
+cavity identification, and tooth segmentation. 
+B. Proposed Methodology
+The methodology proposed in the paper develops a novel 
+combination of U-Net++ model and Efficient Channel 
+Attention mechanism for enhanced teeth segmentation. For 
+the selection of U-Net++ as the backbone of the proposed 
+segmentation model, the study implemented six other state-
+of-art segmentation models to identify the best performing 
+baseline model on the underlying dataset.  
+U-Net++ is derived from the simple U-Net, with
+additional convolutional layers and dense skip connections 
+to improve the feature extraction of different details and 
+merging them respectively. The architecture features 
+alternating contracting and expansive pathways. The 
+contracting path applies convolution and pooling operations 
+for the prediction of contextual information, while the 
+expansive path includes up-sampling and concatenation to 
+predict the pixel location. Interlayer jump connections that 
+define how one layer connects to the subsequent layer help 
+in maintaining location information to enable accurate 
+segmentation.  
+As presented in Figure 2, the model includes five blocks in 
+the encoding phase and decoding phase. In encoding phase 
+each block is a combination of convolutional layers 
+followed by batch normalization and max pooling layers. 
+Max-pooling layers are used for downsampling and dropout 
+layers for regularization. The extraction of the bottleneck 
+layer is done at a very high level of abstraction. In the 
+decoding or the expansive path the upsample of the feature 
+map by way of transposed convolution to the output 
+resolution connect skip connections to concatenate features 
+from the encoder or contracting path before convoluting the 
+data.  
+Fig. 2. U-Net++ Architecture 
+C. Effic
+ient Channel Attention Network:
+The baseline U-Net++ model is leveraged by integrating the 
+Efficient channel attention network layer into the UNet++ 
+model at its most complex level, named the bottleneck as 
+1319
+--- PAGE 4 ---
+presented in Figure 3. Efficient Channel Attention Network 
+(ECA-Net) is a lightweight and effective attention 
+mechanism designed to improve feature representation by 
+focusing on important channel-wise information. For 
+downsampling the feature maps to have a single value per 
+channel, it applies global average pooling layer followed by 
+a 1D convolution layer to capture the interaction at local 
+cross-channel level. Last but not the least, it computes the 
+attention weights by employing sigmoid activation followed 
+by the use of these weights to scale the input feature. This 
+attention mechanism helps to achieve better feature 
+representation because it allows to focus on the most 
+informative channel. It is necessary to normalize and resize 
+the pictures and masks during the training process.  
+Due to blending with the ECA-Net layer, the model can 
+capture small details and get a very large boost in 
+segmentation performance without suffering a very high 
+computational load. UNet++ enhances the feature maps 
+through the channel attention block applied channel-wise 
+after the ECA layer post-bottleneck. We can assist 
+segmentation attempts through the usage of the weighted 
+feature maps as it focuses on the relevant data. The resulting 
+maps are then up-sampled before a further segmentation 
+step.This makes the ECA-Net integrated UNet++ a very 
+effective and potent architecture for medical picture 
+segmentation and associated tasks to leverage on the 
+improved feature representation and the effective channel 
+wise attention for enhanced performance. 
+Fig. 3. The proposed UNet++ model integrated with Efficient Channel 
+Attent
+ion Network (ECA-Net) for teeth segmentation. 
+D. PILOT STUDY
+For t
+he purpose of this study, the work implements different 
+state-of-art segmentation models for baseline model 
+selection and comprehensive comparisons to prove the 
+robustness of the proposed model 
+U-shaped neural network (U-Net):
+The U-Net architecture features alternating contracting and 
+expansive pathways. The contracting consists convolution 
+layers followed by pooling layers that aids in predicting the 
+contextual information. On the other hand, the expansive 
+path includes up-sampling layers and concatenation layers 
+to predict the pixel location. Interlayer jump connections 
+connecting the layers to the subsequent layers 
+maintainlocation information to enable accurate 
+segmentation. U-Net effectively achieves one-to-one 
+mapping of objects in images due to its capability to learn 
+from sparse training and thereby segment images for a 
+number of applications. 
+Fully Convolutional Networks (FCNs): 
+Fully Convolutional Networks (FCNs) are designed for 
+semantic segmentation, performing pixel-level segmentation 
+through an end-to-end approach with a backbone 
+architecture. For the input images, they employ the 
+convolutional layers to perform the density prediction of the 
+images. FCNs perform segmentation tasks by preserving 
+aspects of spatial information and adapting well to input 
+image size. This makes them applicable to many images 
+where need for segmentation of pictures is of the essence 
+particularly when the spatial topography is critical. 
+ Efficient Neural Network (ENet): 
+Efficient Neural Network (ENet) is developed especially to 
+perform real-time semantic segmentation in scenarios with 
+limited hardware resources. It uses bottleneck layers, 
+asymmetric convolutions, and deep separable convolutions 
+for achieving a high degree of segmentation and reduced  
+computational costs. Specifically, ENet also aggregates 
+spatial and channel-wise features for accurate pixel-level 
+context description in a small window footprint, so that 
+efficient pixel-wise predictions can be made. 
+U-Net3+
+U-Net 3+ adds multi-resolution merging, attention
+mechanisms to the original U-Net architecture. It includes
+convolutional dense blocks and feature pyramid attention
+modules for enhancement of features agreement and for
+acquisition of multi-scale collective context information.
+Even more, the usage of a global context module increases
+the awareness of the scene as a whole and results in
+increased accuracy and entity segmentation repeatability.
+SwiftNet: 
+SwiftNet is a convolutional neural network for real-time 
+semantic segmentation where the resource efficient 
+operations are made suitable for edge devices. It utilizes the 
+depth-wise separable convolution type and efficient spatial 
+pyramid pooling to obtain high visibility with low 
+computational requirements. To overcome these challenges 
+SwiftNet integrates contexts at multi-scales through a 
+feature fusion technique which minimizes energy 
+consumption and the response time of the machines 
+involved. This makes it ideal for a variety of applications in 
+edge computing 
+IV. EXPERIMENTATION AND RESULTS
+The in
+put images are initially normalized and thresholded to 
+obtain binary masks. An additional subclass to the 
+DataGenerator class is created to handle the images and 
+1320
+--- PAGE 5 ---
+masks in batches. All the models implemented are trained 
+using
+ the same parameter settings to maintain consistency in 
+model learning environments. Binary cross entropy loss and 
+Adam optimizer are used by the models to learn the dataset 
+features efficiently with a learning rate of 0.0001. The 
+models are trained for 100 epochs and are compounded with 
+early stopping so as to reduce both training and validation 
+loss and to avoid over-fitting of the models. 
+The models evaluate their segmentation 
+performance based on the set of standard metrics namely, 
+Accuracy, Intersection over Union, Dice Coefficient, Peak 
+Signal to Noise ratio, F-score, and Mean average Precision 
+(mAP) performance metrics. Higher values of accuracy, 
+IoU, dice coefficient, peal signal to noise ratio (PSNR), F-
+score and mAP indicate good results. Dice Coefficientis 
+used in image segmentation measures similarity between 
+predicted and ground truth masks, PSNR quantifies the 
+quality of a compressed or reconstructed image by 
+measuring the ratio between the maximum signal power and 
+the power of noise, mAP measures a model's performance in 
+object detection by averaging the average precision across 
+classes and IoU measures the overlap between the predicted 
+and ground truth masks in object detection and 
+segmentation. 
+TABEL I. TRAINING, VALIDATION AND TESTING LOSS METRICS OBTAINED 
+BY DIFFERENT MODELS ON THE TOOTH SEGMENTATION DATASET. 
+Table I presents the loss and the accuracy values obtained 
+by the different models for training, validation and testing 
+phases over epochs. It can be seen that all the state-of-art 
+models performed decently on the dataset but the SwiftNet 
+model. It obtained the worst results with accuracies between 
+68% to 75%. It is clearly evident that amongst the baseline 
+models, UNet++ achieved the best learning on the dataset, 
+thereby, making it a strong candidate for the backbone of 
+the proposed model. The proposed model that leverages the 
+UNet++ model with ECA-Net attention mechanism obtains 
+the highest accuracy and the least loss values for all the 
+three data sets.  
+Figure 4 depicts the loss curve obtained for the proposed 
+UNet++ model with ECA-Net attention mechanism. The 
+graph demonstrates a good learning fit obtained by the 
+model. The training loss and the validation loss reduced 
+drastically during the initial 10 epochs with a gradual 
+decrease between 10 to 20 epochs. The curve starts 
+saturating after 20th epoch depicting a good model fit on the 
+dataset. It is evident that ECA-Net attention model with U-
+Net++ can perform high-quality segmentation for the input 
+modality. 
+Next, the comparisons amongstdifferent models in Table II 
+proves that the proposed UNet++ model enhanced with 
+Efficient channel attentionperforms the best over-all based 
+on PSNR, Dice coefficient, mAP and accuracy metrics. 
+UNet++ with ECA Net achieves a Dice coefficient of 0.907 
+and a PSNR of 16.77, suggesting strong segmentation 
+accuracy and high-quality image retention. Also, UNet++’s 
+selection as a baseline model is supported by a remarkable 
+map=92% and Dice coefficient = 841.6%. 
+Fig. 4. Loss curve obatined  by the proposed UNet++ with ECA-NET 
+attention mechanism for tooth segmentation.     
+UNet++ with ECA-Net mechanism’s higher 
+metrics underscore its superior ability to accurately segment 
+images and retain image quality. The overall results 
+demonstrate that while attention mechanisms significantly 
+enhance the UNet++ architecture, the ECA attention 
+mechanism is the preferred choice for automated tooth 
+identification and segmentation in X-ray images with the 
+highest accuracy of 97%. 
+TABEL II. PERFORMANCE COMPARISONS OF DIFFERENT MODELS AGAINST 
+THE PROPOSED MODEL ON THE TOOTH SEGMENTATION DATASET. 
+These metric values suggest that, the proposed model has 
+enhanced generalization and segmentation ability due to the 
+integration of ECA-Net mechanism. On the other hand, with 
+the lowest Dice coefficient and PSNR scores, SwiftNet and 
+the Efficient Neural Network appear to be unsuitable for 
+Models 
+Train 
+Validation Test 
+Loss Acc Loss Acc Loss Acc 
+U-Net 0.223 0.906 0.239 0.901 0.234 0.902 
+FCN 0.174 0.911 0.171 0.913 0.176 0.908 
+ENet 0.191 0.915 0.317 0.895 0.293 0.899 
+U-Net++ 0.063 0.975 0.074 0.970 0.072 0.970 
+U-Net3+ 0.183 0.913 0.198 0.906 0.192 0.908 
+Swift Net 0.592 0.757 0.609 0.683 0.615 0.680 
+UNet++ 
+ECA Ne
+t 
+(Proposed) 
+0.046 0.981 0.053 0.979 0.053 0.978 
+Models Loss Dice PSNR mAP Acc 
+U-Net 0.234 0.533 10.10 0.513 0.902 
+FCN 0.171 0.669 10.39 0.608 0.908 
+ENet 0.317 0.393 9.986 0.478 0.899 
+U-Net++ 0.054 0.816 18.04 0.920 0.970 
+U-Net3+ 0.198 0.557 10.04 0.573 0.908 
+Swift Net 0.609 0.157 4.96 0.118 0.680 
+UNet++ with 
+ ECA Net 
+(Propo
+sed) 
+0.053 0.907 16.77 0.964 0.978 
+1321
+--- PAGE 6 ---
+tooth segmentation while U-Net, Fully convoltuional 
+netwo
+rk, UNet3+ obtained very average performance with 
+their Dice coefficient ranging between 50% to 60%.  
+Fig. 5 presents the graphical results of the segmentation 
+mask generated by the proposed ECA-Net integrated 
+UNet++ approach on the sample images from tooth 
+segmentation dataset. It can be seen clearly that the 
+segmentation masks generated by the proposed model is 
+very much similar to the ground truth masks. Infact, sharper 
+segmentation results are obtained that are able to distinguish 
+between different teeth. 
+Fig. 5. Segmentation of Dental Xray using the proposed segmentation 
+model 
+V. CONCLUSION AND FUTURE SCOPE
+The work presented in this paper indicated that the 
+baseline U-Net++ model consistently outperformed other 
+models namely, U-net, FCN, ENet, U-net3+ and SwiftNet 
+for dental segmentation by having low values of loss, high 
+IoU, Dice coefficient values and high PSNR and mAP 
+values. Further integrating U-Net with Efficient Channel 
+Attention Network improved the model’s performance, with 
+the IoU of 0.830 and the Dice coefficient of 0. 907. This 
+implies enhanced segmentation skills and abilities in the 
+respective marketing organizations. These conclusions all 
+substantiate the generalization that the integration of 
+enhanced attention mechanism improved segmentation and 
+offers a solid and highly efficient solution for demanding 
+segmentation. More research studies can be done to 
+innovate and combined with other modern strategies like 
+transformers, multi-head attention mechanisms etc. to 
+enhance the efficiency of the segmentation in the future to 
+enhance the diagnostic capacities of dentistry and contribute 
+to creating better treatment strategies. 
+. 
+REFERENCES 
+[1] Lee, J.H., Kim, D.H., Jeong, S.N. and Choi, S.H., 2018. Detection and 
+diagnosis of dental caries using a deep learning-based convolutional 
+neural network algorithm. Journ al of dentistry, 77, pp.106-111. 
+[2] Sajid, S., Hussain, S. and Sarwar, A., 2019. Brain tumor detection and 
+segmentation in MR images using deep learning. Arabi an Journal for
+Science and Engineering, 44, p p.9249-9261. 
+[3]Stember, J.N., Celik, H., Krupinski, E., Chang, P.D., Mutasa, S., Wood,
+B.J., Lignelli, A., Moonis, G., Schwartz, L.H., Jambawalikar, S. and 
+Bagci, U., 2019. Eye tracking for deep learning segmentation using 
+convolutional neural networks. Journ al of digital imaging, 32, pp.597-
+604. 
+[4] Muresan, M.P., Barbura, A.R. and Nedevschi, S., 2020, September.
+Teeth detection and dental problem classification in panoramic X-ray 
+images using deep learning and image processing techniques. In 2020 
+IEEE 16th International Conference on Intelligent Computer
+Communication and Processing (ICCP) (pp.  457-463). IEEE.
+[5]Panetta, K., Rajendran, R., Ramesh, A., Rao, S.P. and Agaian, S., 2021.
+Tufts dental database: a multimodal panoramic x-ray dataset for
+benchmarking diagnostic systems. IEEE journal of biomedical and 
+health informatics, 26(4),  pp.1650-1659. 
+[6] Almalki, S.A., Alsubai, S., Alqahtani, A. and Alenazi, A.A., 2023. 
+Denoised encoder-based residual U-net for precise teeth image
+segmentation and damage prediction on panoramic
+radiographs. Journ al of Dentistry, 137, p.104651.. 
+[7] Ghahremani, T., Hoseyni, M., Ahmadi, M.J., Mehrabi, P. and 
+Nikoofard, A., 2023, December. Advanced Deep Learning-Based
+Approach for Tooth Detection, and Dental Cavity and Restoration
+Segmentation in X-Ray Images. In 2023 11th RSI International
+Conference on Robotics and Mechatronics (ICRoM)  (pp.  701-707).
+IEEE.
+[8] Karacan, M.H. and Yücebas, S.C., 2022, June. A deep learning model 
+with attention mechanism for dental image segmentation. In 2022 
+International Congress on Human-Computer Interaction, Optimization
+and Robotic Applications (HORA) (pp.  1-4). IEEE.
+[9] Fariza, A., Arifin, A.Z. and Astuti, E.R., 2020, October. Automatic 
+Tooth and Background Segmentation in Dental X-ray Using U-Net
+Convolution Network. In 2020 6th International Conference on
+Science in Information Technology (ICSITech) (pp.  144-149). IEEE. 
+[10] Rohrer, C., Krois, J., Patel, J., Meyer-Lueckel, H., Rodrigues, J.A. and 
+Schwendicke, F., 2022. Segmentation of dental restorations on
+panoramic radiographs using deep learning. Diagn ostics, 12(6),
+p.1316. 
+[11] Hou, S., Zhou, T., Liu, Y., Dang, P., Lu, H. and Shi, H., 2023. Teeth 
+U-Net: A segmentation model of dental panoramic X-ray images for
+context semantics and contrast enhancement. Compu ters in Biology
+and Medicine, 152, p.106296. 
+[12] Çelik, B., Savaştaer, E.F., Kaya, H.I. and Çelik, M.E., 2023. The role
+of deep learning for periapical lesion detection on panoramic 
+radiographs. Dento maxillofacial Radiology, 52(8), p.20230118. 
+[13] Silva, B., Pinheiro, L., Oliveira, L. and Pithon, M., 2020, November.
+A study on tooth segmentation and numbering using end-to-end deep
+neural networks. In 2020 33rd SIBGRAPI conference on graphics, 
+patterns and images (SIBGRAPI) (pp.  164-171). IEEE. 
+[14] Chahal, E.S., Haritosh, A., Gupta, A., Gupta, K. and Sinha, A., 2019,
+October. Deep learning model for brain tumor segmentation & 
+analysis. In 2019 3rd International conference on recent developments 
+in control, automation & power engineering (RDCAPE) (pp.  378-383).
+IEEE.
+[15]Ali, M., Khan, M. and Tung, N.T., 2018. Segmentation of dental X-ray 
+images in medical imaging using neutrosophic orthogonal 
+matrices. Expert Systems with Applications, 91, pp.434-441. 
+[16]Resmi, S., Singh, R.P. and Palaniappan, K., 2024. Automated Cervical 
+Cytology Image Cell Segmentation Using Enhanced MultiResUNet
+with DCT and Spectral Domain Attention Mechanisms. IEEE Access. 
+[17] Resmi, S., Singh, R.P. and Palaniappan, K., 2024. Automa t ic Skull
+Shape Completion of Defective Skulls Using Transformers for Cranial 
+Implant Design. Proce dia Computer Science, 235, pp.3305-3314. 
+[18] Garrepalli, V., Gupta, V., Abhishek, S. and Anjali, T., 2 024, May.
+Empowering oral healthcare: Cnn-assisted diagnosis for improved
+patient outcomes. In 2024 Second International Conference on Data 
+Science and Information System (ICDSIS) (pp.  1-5). IEEE. 
+[19] Das, P., Thimmaraju, M.K., Ahalya, N., Anandaram, H. and Kumar,
+A., 2022, October. Design and Comparison of Transfer Learning for 
+Dental Caries Detection. In 2022 International Conference on Edge
+Computing and Applications (ICECAA) (pp.  1311-1316). IEEE.
+1322

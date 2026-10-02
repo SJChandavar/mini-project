@@ -1,0 +1,8 @@
+Model Architecture,Execution Status,Dataset Used,Resolution,Test Dice,Test IoU,Test Accuracy,Test Precision,Test Recall,Test Specificity,Notes
+U-Net,Not executed,Humans in the Loop,N/A,N/A,N/A,N/A,N/A,N/A,N/A,Model class available in models/unet.py; checkpoint not trained
+FCN,Not executed,Humans in the Loop,N/A,N/A,N/A,N/A,N/A,N/A,N/A,Model class available in models/fcn.py; checkpoint not trained
+ENet,Not executed,Humans in the Loop,N/A,N/A,N/A,N/A,N/A,N/A,N/A,Model class available in models/enet.py; checkpoint not trained
+U-Net++,Executed,Humans in the Loop,512x512,0.7236,0.5672,0.8904,0.6120,0.9412,0.8750,Baseline architecture evaluated on 90 test images
+U-Net 3+,Not executed,Humans in the Loop,N/A,N/A,N/A,N/A,N/A,N/A,N/A,Model class available in models/unet3plus.py; checkpoint not trained
+SwiftNet,Not executed,Humans in the Loop,N/A,N/A,N/A,N/A,N/A,N/A,N/A,Model class available in models/swiftnet.py; checkpoint not trained
+U-Net++ + ECA (Proposed),Executed,Humans in the Loop,512x512,0.7485,0.5981,0.9085,0.6482,0.9538,0.8912,Proposed architecture evaluated on 90 test images

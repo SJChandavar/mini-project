@@ -1,0 +1,6 @@
+{
+    "best_val_dice": 0.5838303342461586,
+    "best_val_loss": 0.5178634703159333,
+    "last_completed_epoch": 4,
+    "training_time_seconds": 47.98765802383423
+}

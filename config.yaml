@@ -1,0 +1,77 @@
+project:
+  name: "Automated Tooth Segmentation in Dental X-rays"
+  version: "1.0.0"
+  seed: 42
+
+dataset:
+  root: "./data/raw"
+  images: "./data/raw/images"
+  tooth_masks: "./data/raw/tooth_masks"
+  jaw_masks: "./data/raw/maxillomandibular_masks"
+  abnormality_masks: "./data/raw/abnormality_masks"
+  processed_dir: "./data/processed"
+
+split:
+  train: 0.70
+  validation: 0.15
+  test: 0.15
+
+image:
+  width: 512
+  height: 512
+  channels: 1
+
+training:
+  epochs: 100
+  batch_size: 4
+  num_workers: 2
+  early_stopping_patience: 10
+  early_stopping_monitor: "val_loss"
+  early_stopping_mode: "min"
+  save_best_only: true
+  mixed_precision: false
+
+optimizer:
+  name: "adam"
+  learning_rate: 0.0001
+  weight_decay: 0.0
+  beta1: 0.9
+  beta2: 0.999
+
+scheduler:
+  enabled: false
+  name: "reduce_lr_on_plateau"
+  patience: 5
+  factor: 0.5
+  min_lr: 1e-6
+
+loss:
+  name: "bce"
+  type: "binary_cross_entropy"
+
+model:
+  name: "unetplusplus_eca"
+  encoder_channels:
+    - 64
+    - 128
+    - 256
+    - 512
+    - 1024
+  dropout: 0.1
+  deep_supervision: false
+  eca:
+    enabled: true
+    gamma: 2
+    b: 1
+
+inference:
+  threshold: 0.5
+  device: "auto"
+
+augmentation:
+  enabled: true
+  horizontal_flip: true
+  rotation: 10
+  brightness: 0.15
+  contrast: 0.15
+  gaussian_noise: 0.05

@@ -1,0 +1,48 @@
+# GPU optimized configuration
+project:
+  name: "Automated Tooth Segmentation (GPU)"
+  seed: 42
+
+dataset:
+  root: "./data/raw"
+  images: "./data/raw/images"
+  tooth_masks: "./data/raw/tooth_masks"
+
+split:
+  train: 0.70
+  validation: 0.15
+  test: 0.15
+
+image:
+  width: 512
+  height: 512
+  channels: 1
+
+training:
+  epochs: 100
+  batch_size: 8
+  num_workers: 4
+  early_stopping_patience: 10
+  mixed_precision: true
+
+optimizer:
+  name: "adam"
+  learning_rate: 0.0001
+  weight_decay: 0.0
+
+loss:
+  name: "bce"
+
+model:
+  name: "unetplusplus_eca"
+  encoder_channels: [64, 128, 256, 512, 1024]
+  dropout: 0.1
+  eca:
+    enabled: true
+
+inference:
+  threshold: 0.5
+  device: "cuda"
+
+augmentation:
+  enabled: true

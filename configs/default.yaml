@@ -1,0 +1,51 @@
+# Default configuration inheriting from master config.yaml
+project:
+  name: "Automated Tooth Segmentation in Dental X-rays"
+  seed: 42
+
+dataset:
+  root: "./data/raw"
+  images: "./data/raw/images"
+  tooth_masks: "./data/raw/tooth_masks"
+
+split:
+  train: 0.70
+  validation: 0.15
+  test: 0.15
+
+image:
+  width: 512
+  height: 512
+  channels: 1
+
+training:
+  epochs: 100
+  batch_size: 4
+  num_workers: 2
+  early_stopping_patience: 10
+  mixed_precision: false
+
+optimizer:
+  name: "adam"
+  learning_rate: 0.0001
+  weight_decay: 0.0
+
+loss:
+  name: "bce"
+
+model:
+  name: "unetplusplus_eca"
+  encoder_channels: [64, 128, 256, 512, 1024]
+  dropout: 0.1
+  eca:
+    enabled: true
+
+inference:
+  threshold: 0.5
+
+augmentation:
+  enabled: true
+  horizontal_flip: true
+  rotation: 10
+  brightness: 0.15
+  contrast: 0.15
